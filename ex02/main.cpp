@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   main.cpp                                                                                                      */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,10 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
-# include <iostream> 
+int	main ( void )
+{
 
-class Bureaucrat;
-
-class Form {
-
-public:
-
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
-
-	~Form ( void );
-
-	Form & operator= ( const Form & src );
-
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
-
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
-
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
-
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
-
-private:
-
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
-
-};
-
-std::ostream &		operator<< (std::ostream & out, Form & src );
-
-#endif
+}

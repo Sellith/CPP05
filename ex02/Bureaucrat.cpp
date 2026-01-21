@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   Bureaucrat.cpp                                                                                                */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,75 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "Bureaucrat.hpp"
+#include "AForm.hpp"
 
-# include <iostream> 
+Bureaucrat::Bureaucrat ( void ) : _name("John"), _grade(150) {}
 
-class Bureaucrat;
+Bureaucrat::Bureaucrat ( const std::string name , int grade) : _name(name), _grade(grade) {}
 
-class Form {
+Bureaucrat::Bureaucrat ( const Bureaucrat & src ) : _name(src._name), _grade(src._grade) {}
 
-public:
+Bureaucrat::~Bureaucrat ( void ) {}
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src ) 
+{
+	if ( this != &src ) {
+		_grade = src._grade;
+	}
+	return ( *this );
+}
 
-	~Form ( void );
+std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src ) 
+{
+	out << src.getName() << ", bureaucrat grade " << src.getGrade();
+	return (out);
+}
 
-	Form & operator= ( const Form & src );
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+const std::string Bureaucrat::getName ( void ) const
+{
+	return (_name);
+}
 
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
+int	Bureaucrat::getGrade ( void ) const
+{
+	return (_grade);
+}
 
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
+void	Bureaucrat::promotion ( void )
+{
+	_grade--;
+}
 
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
+void	Bureaucrat::demotion ( void )
+{
+	_grade++;
+}
 
-private:
+void	Bureaucrat::put_grade ( int newGrade )
+{
+	_grade = newGrade;
+}
 
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
-
-};
-
-std::ostream &		operator<< (std::ostream & out, Form & src );
-
-#endif
+void	Bureaucrat::signForm ( AForm & form )
+{
+	try {
+		form.beSigned( *this );
+	}
+	catch (Bureaucrat::gradeTooHighException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (Bureaucrat::gradeTooLowException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (AForm::gradeTooHighException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (AForm::signGradeTooLowException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (AForm::formAlreadySigned& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+}

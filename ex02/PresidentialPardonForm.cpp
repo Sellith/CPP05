@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   PresidentialPardonForm.cpp                                                                                    */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,49 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "PresidentialPardonForm.hpp"
+#include "Bureaucrat.hpp"
 
-# include <iostream> 
+PresidentialPardonForm::PresidentialPardonForm ( void ) : 
+	AForm("We shall Rise", 25, 5),
+	_target("Anars") {}
 
-class Bureaucrat;
+PresidentialPardonForm::PresidentialPardonForm ( const std::string name, const std::string target ) : 
+	AForm(name, 25, 5),
+	_target(target) {}
 
-class Form {
+PresidentialPardonForm::PresidentialPardonForm ( const PresidentialPardonForm & src ) : 
+	AForm(src),
+	_target(src._target) {}
 
-public:
+PresidentialPardonForm::~PresidentialPardonForm ( void ) {}
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+PresidentialPardonForm & PresidentialPardonForm::operator= ( const PresidentialPardonForm & src )
+{
+	if ( this != &src ) {
+		AForm::operator=(src);
+		(std::string)_target = src._target;
+	}
 
-	~Form ( void );
+	return ( *this );
+}
 
-	Form & operator= ( const Form & src );
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+void	PresidentialPardonForm::execute ( Bureaucrat const & executor ) const
+{
+	try {
+		AForm::checkRequierements(executor);
+	}
 
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
+	catch (AForm::formNotSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
+	
+	catch (AForm::execGradeTooLowSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
 
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
-
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
-
-private:
-
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
-
-};
-
-std::ostream &		operator<< (std::ostream & out, Form & src );
-
-#endif
+	std::cout << "I hereby inform you that " << _target << " has been pardoned by Zaphod Beeblebrox !" << std::endl;
+}

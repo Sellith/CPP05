@@ -80,7 +80,7 @@ void	Form::beSigned ( Bureaucrat slave )
 		return ;
 	}
 	
-	if (_signGrade < 1) {
+	if (_signGrade < 1 || _execGrade < 1) {
 		throw Form::gradeTooHighException();
 		return ;
 	}
@@ -94,12 +94,12 @@ void	Form::beSigned ( Bureaucrat slave )
 	std::cout << slave.getName() << " signed " << _name << std::endl;
 }
 
-int	Form::getSignGrade ( void )
+int	Form::getSignGrade ( void ) const
 {
 	return (_signGrade);
 }
 
-int	Form::getExecGrade ( void )
+int	Form::getExecGrade ( void ) const
 {
 	return (_execGrade);
 }

@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   AForm.cpp                                                                                                      */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,100 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
-# include <iostream> 
+AForm::AForm ( void ) : 
+	_name("a random paperWork"),
+	_signed(false),
+	_signGrade(150),
+	_execGrade(150) {}
 
-class Bureaucrat;
+AForm::AForm ( const std::string name, const int signGrade, const int execGrade ) : 
+	_name(name),
+	_signed(false),
+	_signGrade(signGrade),
+	_execGrade(execGrade) {}
 
-class Form {
+AForm::AForm ( const AForm & src ) :
+	_name(src._name),
+	_signed(src._signed),
+	_signGrade(src._signGrade),
+	_execGrade(src._execGrade) {}
 
-public:
+AForm::~AForm ( void ) {}
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+AForm & AForm::operator= ( const AForm & src) 
+{
+	if ( this != &src ) {
+		_signed = src._signed;
+		(std::string)_name = src._name;
+	}
 
-	~Form ( void );
+	return ( *this ); 
+}
 
-	Form & operator= ( const Form & src );
+std::ostream &	operator<< ( std::ostream & out, AForm & src )
+{
+	out << src.getName() << ", bureaucrat grade " << src.getSignGrade();
+	return (out);
+}
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+void	AForm::beSigned ( Bureaucrat slave )
+{
+	if (_signed) {
+		throw AForm::formAlreadySigned();
+		return ;
+	}
 
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
+	if (slave.getGrade() < 1) {
+		throw Bureaucrat::gradeTooHighException();
+		return ;
+	}
 
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
+	if (slave.getGrade() > 150) {
+		throw Bureaucrat::gradeTooLowException();
+		return ;
+	}
+	
+	if (_signGrade < 1 || _execGrade < 1) {
+		throw AForm::gradeTooHighException();
+		return ;
+	}
 
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
+	if (slave.getGrade() > _signGrade ) {
+		throw AForm::signGradeTooLowException();
+		return ;
+	}
 
-private:
+	_signed = true;
+	std::cout << slave.getName() << " signed " << _name << std::endl;
+}
 
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
+int	AForm::getSignGrade ( void ) const
+{
+	return (_signGrade);
+}
 
-};
+int	AForm::getExecGrade ( void ) const
+{
+	return (_execGrade);
+}
 
-std::ostream &		operator<< (std::ostream & out, Form & src );
+const std::string AForm::getName ( void ) const
+{
+	return (_name);
+}
 
-#endif
+void	AForm::checkRequierements ( Bureaucrat const & executor ) const
+{
+	if (!_signed) {
+		throw formNotSigned();
+		return ;
+	}
+	if (executor.getGrade() > _execGrade) {
+		throw execGradeTooLowSigned();
+		return ;
+	}
+	
+}

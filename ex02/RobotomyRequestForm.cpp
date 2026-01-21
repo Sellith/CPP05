@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   RobotomyRequestForm.cpp                                                                                       */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,53 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "RobotomyRequestForm.hpp"
+#include "Bureaucrat.hpp"
 
-# include <iostream> 
+RobotomyRequestForm::RobotomyRequestForm ( void ) : 
+	AForm("bip bip boop", 72, 45),
+	_target("Alita") {}
 
-class Bureaucrat;
+RobotomyRequestForm::RobotomyRequestForm ( std::string const name, std::string const target ) :
+	AForm(name, 72, 45), 
+	_target(target) {}
 
-class Form {
+RobotomyRequestForm::RobotomyRequestForm ( RobotomyRequestForm const & src ) :
+	AForm(src),
+	_target(src._target) {}
 
-public:
+RobotomyRequestForm::~RobotomyRequestForm ( void ) {}
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+RobotomyRequestForm &	RobotomyRequestForm::operator= ( RobotomyRequestForm const & src )
+{
+	if ( this != &src ) {
+		AForm::operator=(src);
+		(std::string)_target = src._target;
+	}
+	
+	return ( *this );
+}
 
-	~Form ( void );
+void	RobotomyRequestForm::execute ( Bureaucrat const & executor ) const
+{
+	try {
+		AForm::checkRequierements(executor);
+	}
 
-	Form & operator= ( const Form & src );
+	catch (AForm::formNotSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
+	
+	catch (AForm::execGradeTooLowSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+	std::cout << "Drilling noises... Pending... " << std::endl;
 
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
-
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
-
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
-
-private:
-
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
-
-};
-
-std::ostream &		operator<< (std::ostream & out, Form & src );
-
-#endif
+	if (std::rand() % 2)
+		std::cout << "informing : " << _target << "'s robotomy has been successfull !" << std::endl;
+	else
+		std::cout << "informing : " << _target << "'s robotomy has failed !" << std::endl;
+}

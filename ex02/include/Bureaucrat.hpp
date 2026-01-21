@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   Bureaucrat.hpp                                                                                                  */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,35 +24,39 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#ifndef BUREAUCRAT_HPP
+# define BUREAUCRAT_HPP
 
-# include <iostream> 
+# include <iostream>
 
-class Bureaucrat;
+class AForm;
 
-class Form {
+class Bureaucrat {
 
 public:
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+	Bureaucrat ( void );
+	Bureaucrat ( const std::string name , int grade );
+	Bureaucrat ( const Bureaucrat & src );
+	
+	~Bureaucrat ( void );
 
-	~Form ( void );
+	void	signForm ( AForm & form );
 
-	Form & operator= ( const Form & src );
+	Bureaucrat &		operator= ( const Bureaucrat & src );
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+	const std::string	getName ( void ) const;
+	int					getGrade ( void ) const;
+
+	void				promotion ( void );
+	void				demotion ( void );
+	void				put_grade ( int newGrade );
 
 	class gradeTooHighException : std::exception {
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
+				return ("bureaucrat's grade is invalid (too high)");
 			}
 	};
 
@@ -60,27 +64,17 @@ public:
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
-
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
+				return ("bureaucrat's grade is invalid (too Low)");
 			}
 	};
 
 private:
 
 	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
+	int					_grade;
 
 };
 
-std::ostream &		operator<< (std::ostream & out, Form & src );
+std::ostream &		operator<< (std::ostream & out, Bureaucrat & src );
 
 #endif

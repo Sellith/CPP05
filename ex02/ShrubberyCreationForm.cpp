@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   ShrubberyCreationForm.cpp                                                                                     */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,63 +24,48 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#include "ShrubberyCreationForm.hpp"
+#include "Bureaucrat.hpp"
 
-# include <iostream> 
+ShrubberyCreationForm::ShrubberyCreationForm ( void ) :
+	AForm("yip fox", 145, 137),
+	_target("home") {}
 
-class Bureaucrat;
+ShrubberyCreationForm::ShrubberyCreationForm ( std::string const name, std::string const target) :
+	AForm(name, 145, 137),
+	_target(target) {}
 
-class Form {
+ShrubberyCreationForm::ShrubberyCreationForm ( ShrubberyCreationForm const & src ) :
+	AForm(src),
+	_target(src._target) {}
 
-public:
+ShrubberyCreationForm::~ShrubberyCreationForm ( void ) {}
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+ShrubberyCreationForm &	ShrubberyCreationForm::operator= ( ShrubberyCreationForm const & src )
+{
+	if ( this != &src ) {
+		AForm::operator=(src);
+		(std::string)_target = src._target;
+	}
 
-	~Form ( void );
+	return ( *this );
+}
 
-	Form & operator= ( const Form & src );
+void	ShrubberyCreationForm::execute ( Bureaucrat const & executor ) const
+{
+	try {
+		AForm::checkRequierements(executor);
+	}
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
-	int					getSignGrade ( void ) const;
-	int					getExecGrade ( void ) const;
+	catch (AForm::formNotSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
+	
+	catch (AForm::execGradeTooLowSigned& e) {
+		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
 
-	class gradeTooHighException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
-	};
-
-	class gradeTooLowException : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
-	};
-
-	class formAlreadySigned : std::exception {
-		
-		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
-	};
-
-private:
-
-	const std::string	_name;
-	bool				_signed;
-	const int			_signGrade;
-	const int			_execGrade;
-
-};
-
-std::ostream &		operator<< (std::ostream & out, Form & src );
-
-#endif
+	std::cout << "Creating " << _target << "_shrubbery in the " << std::endl;
+}

@@ -35,15 +35,17 @@ int	main ( void )
 	Bureaucrat	intruder2("i2", -1);
 	Bureaucrat	intruder3("i3", 151);
 
-	Form		random_form;
+	Form		randomForm;
 	Form		form;
 	Form		actions("the actions papers", 10, 5);
+	Form		wrongForm("WrongForm", 0, 0);
 
-	a.signForm(random_form);
+	a.signForm(randomForm);
 	a.signForm(actions);
 
-	Pdg.signForm(random_form);
+	Pdg.signForm(randomForm);
 	Pdg.signForm(actions);
+	Pdg.signForm(wrongForm);
 	intruder1.signForm(form);
 	intruder2.signForm(form);
 	intruder3.signForm(form);

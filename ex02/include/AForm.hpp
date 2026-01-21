@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   Form.hpp                                                                                                      */
+/*   AForm.hpp                                                                                                      */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -24,29 +24,31 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#ifndef FORM_HPP
-# define FORM_HPP
+#ifndef AFORM_HPP
+# define AFORM_HPP
 
 # include <iostream> 
 
 class Bureaucrat;
 
-class Form {
+class AForm {
 
 public:
 
-	Form ( void );
-	Form ( const std::string name, const int signGrade, const int execGrade );
-	Form ( const Form & src );
+	AForm ( void );
+	AForm ( const std::string name, const int signGrade, const int execGrade );
+	AForm ( const AForm & src );
 
-	~Form ( void );
+	virtual ~AForm ( void );
 
-	Form & operator= ( const Form & src );
+	AForm & operator= ( const AForm & src );
 
-	void				beSigned ( Bureaucrat slave );
-	const std::string	getName ( void );
+	const std::string	getName ( void ) const;
 	int					getSignGrade ( void ) const;
 	int					getExecGrade ( void ) const;
+	void				beSigned ( Bureaucrat slave );
+	void				checkRequierements ( Bureaucrat const & executor ) const;
+	virtual void		execute ( Bureaucrat const & executor ) const = 0;
 
 	class gradeTooHighException : std::exception {
 		
@@ -56,11 +58,11 @@ public:
 			}
 	};
 
-	class gradeTooLowException : std::exception {
+	class signGradeTooLowException : std::exception {
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "his grade is too low";
+				return "his grade is too low to sign it";
 			}
 	};
 
@@ -69,6 +71,22 @@ public:
 		public:
 			virtual const char *	what() const throw() {
 				return "this form is already signed";
+			}
+	};
+
+	class formNotSigned : std::exception {
+		
+		public:
+			virtual const char *	what() const throw() {
+				return "this form is not signed";
+			}
+	};
+
+	class execGradeTooLowSigned : std::exception {
+		
+		public:
+			virtual const char *	what() const throw() {
+				return "his Grade is too low to execute it";
 			}
 	};
 
@@ -81,6 +99,6 @@ private:
 
 };
 
-std::ostream &		operator<< (std::ostream & out, Form & src );
+std::ostream &		operator<< (std::ostream & out, AForm & src );
 
 #endif
