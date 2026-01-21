@@ -29,12 +29,13 @@
 
 # include <iostream> 
 
-# include "Bureaucrat.hpp"
+class Bureaucrat;
 
 class Form {
 
 public:
 
+	Form ( void );
 	Form ( const std::string name, const int signGrade, const int execGrade );
 	Form ( const Form & src );
 
@@ -44,14 +45,14 @@ public:
 
 	void				beSigned ( Bureaucrat slave );
 	const std::string	getName ( void );
-	const int			getSignGrade ( void );
-	const int			getExecGrade ( void );
+	int					getSignGrade ( void );
+	int					getExecGrade ( void );
 
 	class gradeTooHighException : std::exception {
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "this grade is not valid";
+				return "his grade is not valid";
 			}
 	};
 
@@ -59,7 +60,7 @@ public:
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "grade too low";
+				return "his grade is too low";
 			}
 	};
 
@@ -67,7 +68,7 @@ public:
 		
 		public:
 			virtual const char *	what() const throw() {
-				return "Form already signed";
+				return "this form is already signed";
 			}
 	};
 

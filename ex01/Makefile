@@ -51,7 +51,7 @@ CLR_WTH		:=	\033[1;97m
 
 ERS_STR		:=	\033[2K\r
 
-SRCS		:=	main.cpp Bureaucrat.cpp 
+SRCS		:=	main.cpp Bureaucrat.cpp Form.cpp
 
 OBJS		:=	$(patsubst %.cpp, $(D_BUILD_DIR)/%.o, $(SRCS))
 

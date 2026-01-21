@@ -25,6 +25,13 @@
 /* *************************************************************************************************************** */
 
 #include "Form.hpp"
+#include "Bureaucrat.hpp"
+
+Form::Form ( void ) : 
+	_name("a random paperWork"),
+	_signed(false),
+	_signGrade(150),
+	_execGrade(150) {}
 
 Form::Form ( const std::string name, const int signGrade, const int execGrade ) : 
 	_name(name),
@@ -35,16 +42,17 @@ Form::Form ( const std::string name, const int signGrade, const int execGrade ) 
 Form::Form ( const Form & src ) :
 	_name(src._name),
 	_signed(src._signed),
-	_signGrade(_signGrade),
+	_signGrade(src._signGrade),
 	_execGrade(src._execGrade) {}
 
 Form::~Form ( void ) {}
 
 Form & Form::operator= ( const Form & src) 
 {
-	if ( this != &src )
+	if ( this != &src ) {
 		_signed = src._signed;
 		(std::string)_name = src._name;
+	}
 
 	return ( *this ); 
 }
@@ -57,23 +65,41 @@ std::ostream &	operator<< ( std::ostream & out, Form & src )
 
 void	Form::beSigned ( Bureaucrat slave )
 {
-	if (slave.getGrade() > _signGrade )
-		throw Form::gradeTooLowException();
-		return ;
-
-	if (_signed)
+	if (_signed) {
 		throw Form::formAlreadySigned();
 		return ;
+	}
+
+	if (slave.getGrade() < 1) {
+		throw Bureaucrat::gradeTooHighException();
+		return ;
+	}
+
+	if (slave.getGrade() > 150) {
+		throw Bureaucrat::gradeTooLowException();
+		return ;
+	}
+	
+	if (_signGrade < 1) {
+		throw Form::gradeTooHighException();
+		return ;
+	}
+
+	if (slave.getGrade() > _signGrade ) {
+		throw Form::gradeTooLowException();
+		return ;
+	}
 
 	_signed = true;
+	std::cout << slave.getName() << " signed " << _name << std::endl;
 }
 
-const int	Form::getSignGrade ( void )
+int	Form::getSignGrade ( void )
 {
 	return (_signGrade);
 }
 
-const int	Form::getExecGrade ( void )
+int	Form::getExecGrade ( void )
 {
 	return (_execGrade);
 }

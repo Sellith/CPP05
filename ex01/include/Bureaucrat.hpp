@@ -29,18 +29,19 @@
 
 # include <iostream>
 
-# include "Form.hpp"
+class Form;
 
 class Bureaucrat {
 
 public:
 
-	Bureaucrat ( const std::string name );
+	Bureaucrat ( void );
+	Bureaucrat ( const std::string name , int grade );
 	Bureaucrat ( const Bureaucrat & src );
 	
 	~Bureaucrat ( void );
 
-	void	signForm ( const Form form );
+	void	signForm ( Form & form );
 
 	Bureaucrat &		operator= ( const Bureaucrat & src );
 
@@ -55,7 +56,7 @@ public:
 		
 		public:
 			virtual const char *	what() const throw() {
-				return ("'s grade is too high");
+				return ("bureaucrat's grade is invalid (too high)");
 			}
 	};
 
@@ -63,7 +64,7 @@ public:
 		
 		public:
 			virtual const char *	what() const throw() {
-				return ("'s grade is too Low");
+				return ("bureaucrat's grade is invalid (too Low)");
 			}
 	};
 

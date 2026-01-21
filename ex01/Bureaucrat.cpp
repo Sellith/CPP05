@@ -24,7 +24,10 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#include "Bureaucrat.hpp" 
+#include "Bureaucrat.hpp"
+#include "Form.hpp"
+
+Bureaucrat::Bureaucrat ( void ) : _name("John"), _grade(150) {}
 
 Bureaucrat::Bureaucrat ( const std::string name , int grade) : _name(name), _grade(grade) {}
 
@@ -32,35 +35,64 @@ Bureaucrat::Bureaucrat ( const Bureaucrat & src ) : _name(src._name), _grade(src
 
 Bureaucrat::~Bureaucrat ( void ) {}
 
-Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src ) {
+Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src ) 
+{
 	if ( this != &src ) {
 		_grade = src._grade;
 	}
 	return ( *this );
 }
 
-std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src ) {
+std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src ) 
+{
 	out << src.getName() << ", bureaucrat grade " << src.getGrade();
 	return (out);
 }
 
 
-const std::string Bureaucrat::getName ( void ) {
+const std::string Bureaucrat::getName ( void )
+{
 	return (_name);
 }
 
-int	Bureaucrat::getGrade ( void ) {
+int	Bureaucrat::getGrade ( void )
+{
 	return (_grade);
 }
 
-void	Bureaucrat::promotion ( void ) {
+void	Bureaucrat::promotion ( void )
+{
 	_grade--;
 }
 
-void	Bureaucrat::demotion ( void ) {
+void	Bureaucrat::demotion ( void )
+{
 	_grade++;
 }
 
-void	Bureaucrat::put_grade ( int newGrade ) {
+void	Bureaucrat::put_grade ( int newGrade )
+{
 	_grade = newGrade;
+}
+
+void	Bureaucrat::signForm ( Form & form )
+{
+	try {
+		form.beSigned( *this );
+	}
+	catch (Bureaucrat::gradeTooHighException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (Bureaucrat::gradeTooLowException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (Form::gradeTooHighException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (Form::gradeTooLowException& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
+	catch (Form::formAlreadySigned& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	}
 }
