@@ -54,19 +54,9 @@ PresidentialPardonForm & PresidentialPardonForm::operator= ( const PresidentialP
 
 void	PresidentialPardonForm::execute ( Bureaucrat const & executor ) const
 {
-	try {
-		AForm::checkRequierements(executor);
-	}
-
-	catch (AForm::formNotSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+	if (!AForm::checkRequierements(executor))
 		return ;
-	}
-	
-	catch (AForm::execGradeTooLowSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
-		return ;
-	}
 
 	std::cout << "I hereby inform you that " << _target << " has been pardoned by Zaphod Beeblebrox !" << std::endl;
+	return ;
 }

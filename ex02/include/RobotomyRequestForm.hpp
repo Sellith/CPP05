@@ -30,7 +30,7 @@
 # include <cstdlib>
 # include "AForm.hpp"
 
-class RobotomyRequestForm : AForm {
+class RobotomyRequestForm : public AForm {
 
 public:
 

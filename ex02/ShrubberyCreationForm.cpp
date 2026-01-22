@@ -28,7 +28,7 @@
 #include "Bureaucrat.hpp"
 
 ShrubberyCreationForm::ShrubberyCreationForm ( void ) :
-	AForm("yip fox", 145, 137),
+	AForm("home tree", 145, 137),
 	_target("home") {}
 
 ShrubberyCreationForm::ShrubberyCreationForm ( std::string const name, std::string const target) :
@@ -53,19 +53,32 @@ ShrubberyCreationForm &	ShrubberyCreationForm::operator= ( ShrubberyCreationForm
 
 void	ShrubberyCreationForm::execute ( Bureaucrat const & executor ) const
 {
-	try {
-		AForm::checkRequierements(executor);
-	}
 
-	catch (AForm::formNotSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+	if (!AForm::checkRequierements(executor))
 		return ;
-	}
-	
-	catch (AForm::execGradeTooLowSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+
+	std::string 	filename = _target + "_shrubbery";
+	std::ofstream	outf(filename.c_str());
+
+	if (!outf.is_open()) {
+		throw failedToOpenFileException();
 		return ;
 	}
 
-	std::cout << "Creating " << _target << "_shrubbery in the " << std::endl;
+	std::cout << "Creating " << filename << " in current directory" << std::endl;
+
+	outf << 
+	"               ,@@@@@@@," << "\n"
+	"       ,,,.   ,@@@@@@/@@,  .oo8888o." << "\n"
+	"    ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o" << "\n"
+	"   ,%&\\%&&%&&%,@@@\\@@@/@@@88\\88888/88'" << "\n"
+	"   %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'" << "\n"
+	" 	%&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'" << "\n"
+	"   `&%\\ ` /%&'    |.|        \\ '|8'" << "\n"
+	"       |o|        | |         | |" << "\n"
+	"       |.|        | |         | |" << "\n"
+	"    \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_" << std::endl;
+
+	outf.close();
+	return ;
 }

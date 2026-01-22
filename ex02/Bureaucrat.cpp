@@ -26,6 +26,7 @@
 
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 
 Bureaucrat::Bureaucrat ( void ) : _name("John"), _grade(150) {}
 
@@ -95,4 +96,27 @@ void	Bureaucrat::signForm ( AForm & form )
 	catch (AForm::formAlreadySigned& e) {
 		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
 	}
+}
+
+void	Bureaucrat::executeForm ( AForm const & form )
+{
+	try {
+		form.execute(*this);
+	}
+
+	catch (AForm::formNotSigned& e) {
+		std::cout << getName() << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
+
+	catch (AForm::execGradeTooLowSigned& e) {
+		std::cout << getName() << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
+
+	catch (ShrubberyCreationForm::failedToOpenFileException& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	std::cout << getName() << " executed " << form.getName() << std::endl;
 }

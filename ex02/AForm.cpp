@@ -109,15 +109,15 @@ const std::string AForm::getName ( void ) const
 	return (_name);
 }
 
-void	AForm::checkRequierements ( Bureaucrat const & executor ) const
+bool	AForm::checkRequierements ( Bureaucrat const & executor ) const
 {
 	if (!_signed) {
 		throw formNotSigned();
-		return ;
+		return (false);
 	}
 	if (executor.getGrade() > _execGrade) {
 		throw execGradeTooLowSigned();
-		return ;
+		return (false);
 	}
-	
+	return (true);
 }

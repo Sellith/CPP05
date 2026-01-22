@@ -51,6 +51,7 @@ public:
 	void				promotion ( void );
 	void				demotion ( void );
 	void				put_grade ( int newGrade );
+	void				executeForm ( AForm const & form );
 
 	class gradeTooHighException : std::exception {
 		

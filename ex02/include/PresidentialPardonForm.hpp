@@ -29,7 +29,7 @@
 
 # include "AForm.hpp"
 
-class PresidentialPardonForm : AForm {
+class PresidentialPardonForm : public AForm {
 
 public:
 

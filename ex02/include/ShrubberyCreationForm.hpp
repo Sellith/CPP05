@@ -27,21 +27,31 @@
 #ifndef SHRUBBERYCREATIONFORM_HPP
 # define SHRUBBERYCREATIONFORM_HPP
 
+# include <fstream>
+
 # include "AForm.hpp"
 
-class ShrubberyCreationForm : AForm {
+class ShrubberyCreationForm : public AForm {
 
 public:
 
 	ShrubberyCreationForm ( void );
 	ShrubberyCreationForm ( const std::string name, const std::string target );
-	ShrubberyCreationForm ( const AForm & src );
+	ShrubberyCreationForm ( const ShrubberyCreationForm & src );
 
 	~ShrubberyCreationForm ( void );
 
 	ShrubberyCreationForm &	operator= ( ShrubberyCreationForm const & src );
 
 	void	execute ( Bureaucrat const & executor ) const;
+
+		class failedToOpenFileException : std::exception {
+		
+		public:
+			virtual const char *	what() const throw() {
+				return "Error : failed to open file";
+			}
+	};
 
 private:
 

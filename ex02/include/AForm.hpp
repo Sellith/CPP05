@@ -47,7 +47,7 @@ public:
 	int					getSignGrade ( void ) const;
 	int					getExecGrade ( void ) const;
 	void				beSigned ( Bureaucrat slave );
-	void				checkRequierements ( Bureaucrat const & executor ) const;
+	bool				checkRequierements ( Bureaucrat const & executor ) const;
 	virtual void		execute ( Bureaucrat const & executor ) const = 0;
 
 	class gradeTooHighException : std::exception {

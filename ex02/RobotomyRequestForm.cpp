@@ -53,19 +53,8 @@ RobotomyRequestForm &	RobotomyRequestForm::operator= ( RobotomyRequestForm const
 
 void	RobotomyRequestForm::execute ( Bureaucrat const & executor ) const
 {
-	try {
-		AForm::checkRequierements(executor);
-	}
-
-	catch (AForm::formNotSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
+	if (!AForm::checkRequierements(executor))
 		return ;
-	}
-	
-	catch (AForm::execGradeTooLowSigned& e) {
-		std::cout << executor.getName() << " couldn't execute " << getName() << " because " << e.what() << std::endl;;
-		return ;
-	}
 
 	std::cout << "Drilling noises... Pending... " << std::endl;
 
@@ -73,4 +62,5 @@ void	RobotomyRequestForm::execute ( Bureaucrat const & executor ) const
 		std::cout << "informing : " << _target << "'s robotomy has been successfull !" << std::endl;
 	else
 		std::cout << "informing : " << _target << "'s robotomy has failed !" << std::endl;
+	return ;
 }

@@ -34,7 +34,7 @@ BUILD_DIR	:=	build
 D_BUILD_DIR	:=	$(BUILD_DIR)/default_build
 
 
-TARGET		:=	bureaucrat
+TARGET		:=	Formzzz
 NAME		:=	$(BIN_DIR)/$(TARGET)
 NAMEDEBUG	:=	$(BIN_DIR)/$(TARGETDEBUG)
 INC_PATH	:=	include
@@ -51,7 +51,7 @@ CLR_WTH		:=	\033[1;97m
 
 ERS_STR		:=	\033[2K\r
 
-SRCS		:=	main.cpp Bureaucrat.cpp Form.cpp
+SRCS		:=	main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyCreationForm.cpp
 
 OBJS		:=	$(patsubst %.cpp, $(D_BUILD_DIR)/%.o, $(SRCS))
 
