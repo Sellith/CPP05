@@ -27,77 +27,42 @@
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
+#include "Intern.hpp"
 #include "Bureaucrat.hpp"
 
 int	main ( void )
 {
-	Bureaucrat	a;
-	Bureaucrat	captn("captn", 90);
-	Bureaucrat	chief("chief", 30);
-	Bureaucrat	Pres("Pdg", 1);
+	Intern		Random;
+	AForm *		newForm;
+	Bureaucrat	Pdg("Pdg", 1);
 
-	ShrubberyCreationForm	Shrub;
-	RobotomyRequestForm		Robot;
-	PresidentialPardonForm	Anar;
-	ShrubberyCreationForm	Shrub2(Shrub);
-	RobotomyRequestForm		Robot2(Robot);
-	PresidentialPardonForm	Anar2(Anar);
-	ShrubberyCreationForm	Shrub3(Shrub);
-	RobotomyRequestForm		Robot3(Robot);
-	PresidentialPardonForm	Anar3(Anar);
+	newForm = Random.makeForm("shrubbery creation", "home");
+	if (newForm) {
+		Pdg.signForm(*newForm);
+		Pdg.executeForm(*newForm);
+	}
+	
+	delete newForm;
 
-	a.signForm(Shrub);
-	a.signForm(Robot);
-	a.signForm(Anar);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
+	newForm = Random.makeForm("robotomy request", "bip boop");
+	if (newForm) {
+		Pdg.signForm(*newForm);
+		Pdg.executeForm(*newForm);
+	}
 
-	captn.signForm(Shrub);
-	captn.signForm(Robot);
-	captn.signForm(Anar);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
+	delete newForm;
 
+	newForm = Random.makeForm("presidential pardon", "Steve the fish");
+	if (newForm) {
+		Pdg.signForm(*newForm);
+		Pdg.executeForm(*newForm);
+	}
 
-	chief.signForm(Shrub2);
-	chief.signForm(Robot2);
-	chief.signForm(Anar2);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
+	delete newForm;
 
-	Pres.signForm(Shrub3);
-	Pres.signForm(Robot3);
-	Pres.signForm(Anar3);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
-
-
-	a.executeForm(Shrub3);
-	captn.executeForm(Shrub3);
-	chief.executeForm(Shrub3);
-	Pres.executeForm(Shrub3);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
-
-	a.executeForm(Robot);
-	captn.executeForm(Robot3);
-	chief.executeForm(Robot3);
-	Pres.executeForm(Robot3);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
-
-	a.executeForm(Anar);
-	captn.executeForm(Shrub3);
-	chief.executeForm(Shrub3);
-	Pres.executeForm(Shrub3);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
-
-	captn.executeForm(Anar3);
-	chief.executeForm(Anar3);
-	Pres.executeForm(Anar3);
-	std::cout << "\n";
-	std::cout << "-------------------------------------------------------------------\n\n";
-
-	return (0);
+	newForm = Random.makeForm("eifeigw", "failure management");
+	if (newForm) {
+		Pdg.signForm(*newForm);
+		Pdg.executeForm(*newForm);
+	}
 }

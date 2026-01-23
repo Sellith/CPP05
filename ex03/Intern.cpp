@@ -32,14 +32,14 @@
 Intern::Intern ( void ) {}
 Intern::Intern ( Intern const & src ) {(void)src;}
 Intern::~Intern ( void ) {}
-Intern &	Intern::operator= ( Intern const & src ) {(void)src;}
+Intern &	Intern::operator= ( Intern const & src ) {(void)src; return (*this);}
 
 
-AForm &	Intern::makeForm ( std::string const name, std::string const target ) 
+AForm *	Intern::makeForm ( std::string const name, std::string const target ) 
 {
 	AForm *	form;
 
-	std::string existing[3] = "shrubbery creation" "robotomy request" "presidential pardon";
+	std::string existing[3] = { "shrubbery creation", "robotomy request", "presidential pardon" };
 
 	int i = 0;
 	while (i < 3 && name != existing[i])
@@ -47,16 +47,18 @@ AForm &	Intern::makeForm ( std::string const name, std::string const target )
 	
 	switch (i) {
 		case 0: form = new ShrubberyCreationForm(name, target);
-		return (*form);
+		std::cout << "Intern creates a Shrubbery Creation Form" << std::endl;
+		return (form);
 
 		case 1: form = new RobotomyRequestForm(name, target);
-		return (*form);
+		std::cout << "Intern creates a Robotomy Request Form" << std::endl;
+		return (form);
 
 		case 2: form = new PresidentialPardonForm(name, target);
-		return (*form);
+		std::cout << "Intern creates a Presidential Pardon Form" << std::endl;
+		return (form);
 
-		default: std::cout << "Error : Incorrect form name !";
+		default: std::cout << "Yikes ! The intern put in the wrong name again ..." << std::endl;
 		return (NULL);
 	}
-
 }

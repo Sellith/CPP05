@@ -41,7 +41,8 @@ public:
 
 	Intern & operator= ( Intern const & src );
 
-	AForm &	makeForm ( std::string const name, std::string const target );
+	AForm *	makeForm ( std::string const name, std::string const target );
+
 };
 
 #endif

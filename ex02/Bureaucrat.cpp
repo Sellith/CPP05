@@ -114,9 +114,10 @@ void	Bureaucrat::executeForm ( AForm const & form )
 		return ;
 	}
 
+	std::cout << getName() << " executed " << form.getName() << std::endl;
+	
 	catch (ShrubberyCreationForm::failedToOpenFileException& e) {
 		std::cout << e.what() << std::endl;
 	}
 
-	std::cout << getName() << " executed " << form.getName() << std::endl;
 }
