@@ -27,6 +27,10 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
+const char *	Form::formAlreadySigned::what() const throw() {return "this form is already signed";}
+const char *	Form::gradeTooLowException::what() const throw() {return "his grade is too low";}
+const char *	Form::gradeTooHighException::what() const throw() {return "the form's grade is not valid";}
+
 Form::Form ( void ) : 
 	_name("a random paperWork"),
 	_signed(false),
@@ -59,7 +63,7 @@ Form & Form::operator= ( const Form & src)
 
 std::ostream &	operator<< ( std::ostream & out, Form & src )
 {
-	out << src.getName() << ", bureaucrat grade " << src.getSignGrade();
+	out << src.getName() << ", signature grade is " << src.getSignGrade() << ", and execution grade is " << src.getExecGrade();
 	return (out);
 }
 
@@ -67,16 +71,6 @@ void	Form::beSigned ( Bureaucrat slave )
 {
 	if (_signed) {
 		throw Form::formAlreadySigned();
-		return ;
-	}
-
-	if (slave.getGrade() < 1) {
-		throw Bureaucrat::gradeTooHighException();
-		return ;
-	}
-
-	if (slave.getGrade() > 150) {
-		throw Bureaucrat::gradeTooLowException();
 		return ;
 	}
 	
@@ -95,16 +89,10 @@ void	Form::beSigned ( Bureaucrat slave )
 }
 
 int	Form::getSignGrade ( void ) const
-{
-	return (_signGrade);
-}
+{return (_signGrade);}
 
 int	Form::getExecGrade ( void ) const
-{
-	return (_execGrade);
-}
+{return (_execGrade);}
 
 const std::string Form::getName ( void )
-{
-	return (_name);
-}
+{return (_name);}

@@ -49,27 +49,18 @@ public:
 	int					getExecGrade ( void ) const;
 
 	class gradeTooHighException : std::exception {
-		
 		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
+			virtual const char *	what() const throw();
 	};
 
 	class gradeTooLowException : std::exception {
-		
 		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low";
-			}
+			virtual const char *	what() const throw();
 	};
 
 	class formAlreadySigned : std::exception {
-		
 		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
+			virtual const char *	what() const throw();
 	};
 
 private:

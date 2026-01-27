@@ -29,45 +29,42 @@
 int	main ( void )
 {
 	Bureaucrat a;
-
-	a.put_grade(150);
-	std::cout << a << std::endl;
-
-	a.demotion();
-
-	try {
-		if (a.getGrade() > 150)
-			throw Bureaucrat::gradeTooLowException();
-		else if (a.getGrade() < 1)
-			throw Bureaucrat::gradeTooHighException();
-	}
 	
-	catch (Bureaucrat::gradeTooLowException& e) {
-		std::cout << a << e.what() << std::endl;
+	try {	
+		a.put_grade(150);
+		std::cout << a << std::endl;
+		a.demotion();
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
 	}
 
-	catch (Bureaucrat::gradeTooHighException& e) {
-		std::cout << a << e.what() << std::endl;
+	try{
+		std::cout << "\n";
+		a.put_grade(1);
+		std::cout << a << std::endl;
+		a.promotion();
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
 	}
 
 	std::cout << "\n";
-	a.put_grade(1);
-	std::cout << a << std::endl;
-	a.promotion();
-	
+
 	try {
-		if (a.getGrade() > 150)
-			throw Bureaucrat::gradeTooLowException();
-		else if (a.getGrade() < 1)
-			throw Bureaucrat::gradeTooHighException();
+		Bureaucrat b("Peasent", 151);
 	}
-	
-	catch (Bureaucrat::gradeTooLowException& e) {
-		std::cout << a << e.what() << std::endl;
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
 	}
 
-	catch (Bureaucrat::gradeTooHighException& e) {
-		std::cout << a << e.what() << std::endl;
+	std::cout << "\n";
+
+	try {
+		Bureaucrat c("God", 0);
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
 	}
 
 	return (0);

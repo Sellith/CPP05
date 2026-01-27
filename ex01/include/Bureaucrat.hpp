@@ -29,19 +29,24 @@
 
 # include <iostream>
 
-class Form;
+# define BUREAUCRAT_TOO_HIGH	std::string("'s grade is too High")
+# define BUREAUCRAT_TOO_LOW		std::string("'s grade is too Low")
+# define ERROR					std::string("Error : ")
+# define PROMOTION_FAIL			std::string("can't promote because ")
+# define DEMOTE_FAIL			std::string("can't demote because ")
+# define CHANGE_GRADE_FAIL		std::string("can't change grade because the newGrade")
+
+class Form ;
 
 class Bureaucrat {
 
 public:
 
 	Bureaucrat ( void );
-	Bureaucrat ( const std::string name , int grade );
+	Bureaucrat ( std::string const name, int const grade );
 	Bureaucrat ( const Bureaucrat & src );
 	
 	~Bureaucrat ( void );
-
-	void	signForm ( Form & form );
 
 	Bureaucrat &		operator= ( const Bureaucrat & src );
 
@@ -51,21 +56,30 @@ public:
 	void				promotion ( void );
 	void				demotion ( void );
 	void				put_grade ( int newGrade );
+	void				signForm ( Form & form );
 
-	class gradeTooHighException : std::exception {
+	class gradeTooHighException : public std::exception {
 		
 		public:
-			virtual const char *	what() const throw() {
-				return ("bureaucrat's grade is invalid (too high)");
-			}
+			gradeTooHighException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~gradeTooHighException() throw() ;
+
+		private:
+			gradeTooHighException();
+			const std::string _msg;
 	};
 
-	class gradeTooLowException : std::exception {
+	class gradeTooLowException : public std::exception {
 		
 		public:
-			virtual const char *	what() const throw() {
-				return ("bureaucrat's grade is invalid (too Low)");
-			}
+			gradeTooLowException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~gradeTooLowException() throw();
+
+		private:
+			gradeTooLowException();
+			const std::string _msg;
 	};
 
 private:

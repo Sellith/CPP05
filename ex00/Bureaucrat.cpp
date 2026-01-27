@@ -26,41 +26,86 @@
 
 #include "Bureaucrat.hpp" 
 
+Bureaucrat::gradeTooHighException::gradeTooHighException(std::string const msg) : _msg(msg) {}
+Bureaucrat::gradeTooHighException::~gradeTooHighException() throw() {}
+
+const char *	Bureaucrat::gradeTooHighException::what() const throw()
+{return (_msg.c_str());}
+
+Bureaucrat::gradeTooLowException::gradeTooLowException(std::string const msg) : _msg(msg) {}
+Bureaucrat::gradeTooLowException::~gradeTooLowException() throw() {}
+
+const char *	Bureaucrat::gradeTooLowException::what() const throw()
+{return (_msg.c_str());}
+
 Bureaucrat::Bureaucrat ( void ) : _name("default"), _grade(1) {}
+
+Bureaucrat::Bureaucrat ( std::string const name, int const grade ) : _name(name), _grade(grade)
+{
+	if (grade > 150)
+	{
+		throw gradeTooLowException(_name + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
+
+	if (grade < 1) {
+		throw gradeTooHighException(_name + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
+}
 
 Bureaucrat::Bureaucrat ( const Bureaucrat & src ) : _name(src._name), _grade(src._grade) {}
 
 Bureaucrat::~Bureaucrat ( void ) {}
 
-Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src ) {
+Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src )
+{
 	if ( this != &src ) {
 		_grade = src._grade;
 	}
 	return ( *this );
 }
 
-std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src ) {
+std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src ) 
+{
 	out << src.getName() << ", bureaucrat grade " << src.getGrade();
 	return (out);
 }
 
 
-const std::string Bureaucrat::getName ( void ) {
-	return (_name);
-}
+const std::string Bureaucrat::getName ( void )
+{return (_name);}
 
-int	Bureaucrat::getGrade ( void ) {
-	return (_grade);
-}
+int	Bureaucrat::getGrade ( void ) 
+{return (_grade);}
 
-void	Bureaucrat::promotion ( void ) {
+void	Bureaucrat::promotion ( void )
+{
+	if (_grade - 1 < 1) {
+		throw gradeTooHighException(ERROR + PROMOTION_FAIL + _name + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
 	_grade--;
 }
 
-void	Bureaucrat::demotion ( void ) {
+void	Bureaucrat::demotion ( void )
+{
+	if (_grade + 1 > 150) {
+		throw gradeTooLowException(ERROR + DEMOTE_FAIL + _name + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
 	_grade++;
 }
 
-void	Bureaucrat::put_grade ( int newGrade ) {
+void	Bureaucrat::put_grade ( int newGrade ) 
+{
+	if (newGrade < 1) {
+		throw gradeTooHighException(ERROR + CHANGE_GRADE + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
+	if (newGrade > 150) {
+		throw gradeTooLowException(ERROR + CHANGE_GRADE + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
 	_grade = newGrade;
 }
