@@ -27,20 +27,20 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
-AForm::signGradeTooLowException::signGradeTooLowException(std::string const msg) : _msg(msg) {}
-AForm::signGradeTooLowException::~signGradeTooLowException() throw() {}
-const char *	AForm::signGradeTooLowException::what() const throw()
+AForm::SignGradeTooLowException::SignGradeTooLowException(std::string const msg) : _msg(msg) {}
+AForm::SignGradeTooLowException::~SignGradeTooLowException() throw() {}
+const char *	AForm::SignGradeTooLowException::what() const throw()
 {return (_msg.c_str());}
 
-AForm::execGradeTooLowException::execGradeTooLowException(std::string const msg) : _msg(msg) {}
-AForm::execGradeTooLowException::~execGradeTooLowException() throw() {}
-const char *	AForm::execGradeTooLowException::what() const throw()
+AForm::ExecGradeTooLowException::ExecGradeTooLowException(std::string const msg) : _msg(msg) {}
+AForm::ExecGradeTooLowException::~ExecGradeTooLowException() throw() {}
+const char *	AForm::ExecGradeTooLowException::what() const throw()
 {return (_msg.c_str());}
 
-const char *	AForm::signGradeTooHighException::what() const throw() {return "the form's signature's grade is not valid (too high)";}
-const char *	AForm::execGradeTooHighException::what() const throw() {return "the form's execution's grade is not valid (too high)";}
-const char *	AForm::formAlreadySigned::what() const throw() {return "this form is already signed";}
-const char *	AForm::formNotSigned::what() const throw() {return "this form is not signed";}
+const char *	AForm::SignGradeTooHighException::what() const throw() {return "the form's signature's grade is not valid (too high)";}
+const char *	AForm::ExecGradeTooHighException::what() const throw() {return "the form's execution's grade is not valid (too high)";}
+const char *	AForm::FormAlreadySigned::what() const throw() {return "this form is already signed";}
+const char *	AForm::FormNotSigned::what() const throw() {return "this form is not signed";}
 
 AForm::AForm ( void ) : 
 	_name("a random paperWork"),
@@ -55,13 +55,13 @@ AForm::AForm ( const std::string name, const int signGrade, const int execGrade 
 	_execGrade(execGrade)
 {
 	if (signGrade > 150)
-		throw signGradeTooLowException(ERROR + _name + SIGN_FORM_TOO_LOW);
+		throw SignGradeTooLowException(ERROR + _name + SIGN_FORM_TOO_LOW);
 	else if (signGrade < 1 )
-		throw signGradeTooHighException();
+		throw SignGradeTooHighException();
 	if (execGrade > 150)
-		throw execGradeTooLowException(ERROR + _name + EXEC_FORM_TOO_LOW);
+		throw ExecGradeTooLowException(ERROR + _name + EXEC_FORM_TOO_LOW);
 	else if (execGrade < 1)
-		throw execGradeTooHighException();
+		throw ExecGradeTooHighException();
 }
 
 AForm::AForm ( const AForm & src ) :
@@ -91,12 +91,12 @@ std::ostream &	operator<< ( std::ostream & out, AForm & src )
 void	AForm::beSigned ( Bureaucrat slave )
 {
 	if (_signed) {
-		throw formAlreadySigned();
+		throw FormAlreadySigned();
 		return ;
 	}
 
 	if (slave.getGrade() > _signGrade ) {
-		throw signGradeTooLowException(SIGN_FORM_TOO_LOW1);
+		throw SignGradeTooLowException(SIGN_FORM_TOO_LOW1);
 		return ;
 	}
 
@@ -116,11 +116,11 @@ const std::string AForm::getName ( void ) const
 bool	AForm::checkRequierements ( Bureaucrat const & executor ) const
 {
 	if (!_signed) {
-		throw formNotSigned();
+		throw FormNotSigned();
 		return (false);
 	}
 	if (executor.getGrade() > _execGrade) {
-		throw execGradeTooLowException(EXEC_FORM_TOO_LOW1);
+		throw ExecGradeTooLowException(EXEC_FORM_TOO_LOW1);
 		return (false);
 	}
 	return (true);

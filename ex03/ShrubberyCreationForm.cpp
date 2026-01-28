@@ -61,7 +61,7 @@ void	ShrubberyCreationForm::execute ( Bureaucrat const & executor ) const
 	std::ofstream	outf(filename.c_str());
 
 	if (!outf.is_open()) {
-		throw failedToOpenFileException();
+		throw FailedToOpenFileException();
 		return ;
 	}
 

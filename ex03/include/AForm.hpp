@@ -57,47 +57,47 @@ public:
 
 	/* Exceptions classes */
 
-	class signGradeTooHighException : public std::exception {
+	class SignGradeTooHighException : public std::exception {
 		public:
 			virtual const char *	what() const throw();
 	};
 
-	class execGradeTooHighException : public std::exception {
+	class ExecGradeTooHighException : public std::exception {
 		public:
 			virtual const char *	what() const throw();
 	};
 	
-	class formAlreadySigned : public std::exception {
+	class FormAlreadySigned : public std::exception {
 		public:
 			virtual const char *	what() const throw();
 	};
 
-	class formNotSigned : public std::exception {
+	class FormNotSigned : public std::exception {
 		public:
 			virtual const char *	what() const throw();
 	};
 
-	class signGradeTooLowException : public std::exception {
+	class SignGradeTooLowException : public std::exception {
 		
 		public:
-			signGradeTooLowException(std::string const msg);
+			SignGradeTooLowException(std::string const msg);
 			const char *	what() const throw();
-			virtual ~signGradeTooLowException() throw() ;
+			virtual ~SignGradeTooLowException() throw() ;
 
 		private:
-			signGradeTooLowException();
+			SignGradeTooLowException();
 			const std::string _msg;
 	};
 
-	class execGradeTooLowException : public std::exception {
+	class ExecGradeTooLowException : public std::exception {
 		
 		public:
-			execGradeTooLowException(std::string const msg);
+			ExecGradeTooLowException(std::string const msg);
 			const char *	what() const throw();
-			virtual ~execGradeTooLowException() throw();
+			virtual ~ExecGradeTooLowException() throw();
 
 		private:
-			execGradeTooLowException();
+			ExecGradeTooLowException();
 			const std::string _msg;
 	};
 

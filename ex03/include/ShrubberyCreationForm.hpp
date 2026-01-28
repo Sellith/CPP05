@@ -45,7 +45,7 @@ public:
 
 	void	execute ( Bureaucrat const & executor ) const;
 
-		class failedToOpenFileException : std::exception {
+		class FailedToOpenFileException : std::exception {
 		
 		public:
 			virtual const char *	what() const throw() {

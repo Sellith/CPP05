@@ -57,27 +57,27 @@ public:
 	void				demotion ( void );
 	void				put_grade ( int newGrade );
 
-	class gradeTooHighException : public std::exception {
+	class GradeTooHighException : public std::exception {
 		
 		public:
-			gradeTooHighException(std::string const msg);
+			GradeTooHighException(std::string const msg);
 			const char *	what() const throw();
-			virtual ~gradeTooHighException() throw() ;
+			virtual ~GradeTooHighException() throw() ;
 
 		private:
-			gradeTooHighException();
+			GradeTooHighException();
 			const std::string _msg;
 	};
 
-	class gradeTooLowException : public std::exception {
+	class GradeTooLowException : public std::exception {
 		
 		public:
-			gradeTooLowException(std::string const msg);
+			GradeTooLowException(std::string const msg);
 			const char *	what() const throw();
-			virtual ~gradeTooLowException() throw();
+			virtual ~GradeTooLowException() throw();
 
 		private:
-			gradeTooLowException();
+			GradeTooLowException();
 			const std::string _msg;
 	};
 
