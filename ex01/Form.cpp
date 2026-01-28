@@ -27,9 +27,19 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
+/* Exception implementation */
+
 const char *	Form::formAlreadySigned::what() const throw() {return "this form is already signed";}
-const char *	Form::gradeTooLowException::what() const throw() {return "his grade is too low";}
-const char *	Form::gradeTooHighException::what() const throw() {return "the form's grade is not valid";}
+
+Form::gradeTooHighException::gradeTooHighException(std::string const msg) : _msg(msg) {}
+Form::gradeTooHighException::~gradeTooHighException() throw() {}
+const char *	Form::gradeTooHighException::what() const throw()
+{return (_msg.c_str());}
+
+Form::gradeTooLowException::gradeTooLowException(std::string const msg) : _msg(msg) {}
+Form::gradeTooLowException::~gradeTooLowException() throw() {}
+const char *	Form::gradeTooLowException::what() const throw()
+{return (_msg.c_str());}
 
 Form::Form ( void ) : 
 	_name("a random paperWork"),
@@ -41,7 +51,13 @@ Form::Form ( const std::string name, const int signGrade, const int execGrade ) 
 	_name(name),
 	_signed(false),
 	_signGrade(signGrade),
-	_execGrade(execGrade) {}
+	_execGrade(execGrade)
+{
+	if (signGrade > 150 || execGrade > 150)
+		throw gradeTooLowException(ERROR + _name + FORM_TOO_LOW);
+	if (signGrade < 1 || execGrade < 1)
+		throw gradeTooHighException(ERROR + _name + FORM_TOO_HIGH);
+}
 
 Form::Form ( const Form & src ) :
 	_name(src._name),
@@ -73,14 +89,9 @@ void	Form::beSigned ( Bureaucrat slave )
 		throw Form::formAlreadySigned();
 		return ;
 	}
-	
-	if (_signGrade < 1 || _execGrade < 1) {
-		throw Form::gradeTooHighException();
-		return ;
-	}
 
 	if (slave.getGrade() > _signGrade ) {
-		throw Form::gradeTooLowException();
+		throw Form::gradeTooHighException(FORM_TOO_HIGH1);
 		return ;
 	}
 

@@ -34,7 +34,7 @@ BUILD_DIR	:=	build
 D_BUILD_DIR	:=	$(BUILD_DIR)/default_build
 
 
-TARGET		:=	Formzzz
+TARGET		:=	Aformz
 NAME		:=	$(BIN_DIR)/$(TARGET)
 NAMEDEBUG	:=	$(BIN_DIR)/$(TARGETDEBUG)
 INC_PATH	:=	include

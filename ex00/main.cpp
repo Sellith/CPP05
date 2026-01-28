@@ -61,7 +61,7 @@ int	main ( void )
 	std::cout << "\n";
 
 	try {
-		Bureaucrat c("God", 0);
+		Bureaucrat c("Femboy", 0);
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;

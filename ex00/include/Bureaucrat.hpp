@@ -29,8 +29,10 @@
 
 # include <iostream>
 
-# define BUREAUCRAT_TOO_HIGH	std::string("'s grade is too High")
-# define BUREAUCRAT_TOO_LOW		std::string("'s grade is too Low")
+# define BUREAUCRAT_TOO_HIGH	std::string("'s inputed grade is invalid (too High)")
+# define BUREAUCRAT_TOO_LOW		std::string("'s inputed grade is invalid (too Low)")
+# define BUREAUCRAT_TOO_HIGH1	std::string("'s grade is too High")
+# define BUREAUCRAT_TOO_LOW1	std::string("'s grade is too Low")
 # define ERROR					std::string("Error : ")
 # define PROMOTION_FAIL			std::string("can't promote because ")
 # define DEMOTE_FAIL			std::string("can't demote because ")
@@ -48,8 +50,8 @@ public:
 
 	Bureaucrat &		operator= ( const Bureaucrat & src );
 
-	const std::string	getName ( void );
-	int					getGrade ( void );
+	const std::string	getName ( void ) const;
+	int					getGrade ( void ) const;
 
 	void				promotion ( void );
 	void				demotion ( void );

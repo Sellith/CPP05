@@ -86,7 +86,7 @@ int	main ( void )
 	std::cout << "\n";
 	std::cout << "-------------------------------------------------------------------\n\n";
 
-	a.executeForm(Anar);
+	a.executeForm(Anar3);
 	captn.executeForm(Shrub3);
 	chief.executeForm(Shrub3);
 	Pres.executeForm(Shrub3);

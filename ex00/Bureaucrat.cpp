@@ -44,12 +44,12 @@ Bureaucrat::Bureaucrat ( std::string const name, int const grade ) : _name(name)
 {
 	if (grade > 150)
 	{
-		throw gradeTooLowException(_name + BUREAUCRAT_TOO_LOW);
+		throw gradeTooLowException(ERROR + _name + BUREAUCRAT_TOO_LOW);
 		return ;
 	}
 
 	if (grade < 1) {
-		throw gradeTooHighException(_name + BUREAUCRAT_TOO_HIGH);
+		throw gradeTooHighException(ERROR + _name + BUREAUCRAT_TOO_HIGH);
 		return ;
 	}
 }
@@ -73,16 +73,16 @@ std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src )
 }
 
 
-const std::string Bureaucrat::getName ( void )
+const std::string Bureaucrat::getName ( void ) const
 {return (_name);}
 
-int	Bureaucrat::getGrade ( void ) 
+int	Bureaucrat::getGrade ( void ) const
 {return (_grade);}
 
 void	Bureaucrat::promotion ( void )
 {
 	if (_grade - 1 < 1) {
-		throw gradeTooHighException(ERROR + PROMOTION_FAIL + _name + BUREAUCRAT_TOO_HIGH);
+		throw gradeTooHighException(ERROR + PROMOTION_FAIL + _name + BUREAUCRAT_TOO_HIGH1);
 		return ;
 	}
 	_grade--;
@@ -91,7 +91,7 @@ void	Bureaucrat::promotion ( void )
 void	Bureaucrat::demotion ( void )
 {
 	if (_grade + 1 > 150) {
-		throw gradeTooLowException(ERROR + DEMOTE_FAIL + _name + BUREAUCRAT_TOO_LOW);
+		throw gradeTooLowException(ERROR + DEMOTE_FAIL + _name + BUREAUCRAT_TOO_LOW1);
 		return ;
 	}
 	_grade++;

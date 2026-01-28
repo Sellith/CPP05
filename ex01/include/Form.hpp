@@ -29,6 +29,11 @@
 
 # include <iostream> 
 
+# define FORM_TOO_HIGH	std::string("form's inputed grade is invalid (too High)")
+# define FORM_TOO_LOW	std::string("form's inputed grade is invalid (too Low)")
+# define FORM_TOO_HIGH1	std::string("it's grade is too High for them to sign it")
+
+
 class Bureaucrat;
 
 class Form {
@@ -48,17 +53,31 @@ public:
 	int					getSignGrade ( void ) const;
 	int					getExecGrade ( void ) const;
 
-	class gradeTooHighException : std::exception {
+	class gradeTooHighException : public std::exception {
+		
 		public:
-			virtual const char *	what() const throw();
+			gradeTooHighException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~gradeTooHighException() throw() ;
+
+		private:
+			gradeTooHighException();
+			const std::string _msg;
 	};
 
-	class gradeTooLowException : std::exception {
+	class gradeTooLowException : public std::exception {
+		
 		public:
-			virtual const char *	what() const throw();
+			gradeTooLowException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~gradeTooLowException() throw();
+
+		private:
+			gradeTooLowException();
+			const std::string _msg;
 	};
 
-	class formAlreadySigned : std::exception {
+	class formAlreadySigned : public std::exception {
 		public:
 			virtual const char *	what() const throw();
 	};

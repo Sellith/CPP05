@@ -29,24 +29,36 @@
 
 int	main ( void )
 {
-	Bureaucrat	a;
+	Bureaucrat	a("Random", 150);
 	Bureaucrat	Pdg("Chief", 1);
-	Bureaucrat	intruder1("i1", 0);
-	Bureaucrat	intruder2("i2", -1);
-	Bureaucrat	intruder3("i3", 151);
 
-	Form		randomForm;
-	Form		form;
+	Form		randomForm("random1", 150, 150);
+	Form		form("random2", 150, 150);
 	Form		actions("the actions papers", 10, 5);
-	Form		wrongForm("WrongForm", 0, 0);
 
+	std::cout << randomForm << std::endl;
 	a.signForm(randomForm);
-	a.signForm(actions);
+	std::cout << "\n";
 
-	Pdg.signForm(randomForm);
+	std::cout << form << std::endl;
+	Pdg.signForm(form);
+	std::cout << "\n";
+
+	std::cout << actions << std::endl;
+	a.signForm(actions);
 	Pdg.signForm(actions);
-	Pdg.signForm(wrongForm);
-	intruder1.signForm(form);
-	intruder2.signForm(form);
-	intruder3.signForm(form);
+	std::cout << "\n";
+
+	try {
+		Form		wrongForm("WrongForm", 0, 0);
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+	try {
+		Form		wrongForm("WrongForm", 50, 151);
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
 }
