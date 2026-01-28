@@ -29,6 +29,11 @@
 
 # include <iostream> 
 
+#define EXEC_FORM_TOO_LOW	std::string("the form's execution's grade is not valid (too low)")
+#define SIGN_FORM_TOO_LOW	std::string("the form's signature's grade is not valid (too low)")
+#define EXEC_FORM_TOO_LOW1	std::string("it's execution's grade is too low")
+#define SIGN_FORM_TOO_LOW1	std::string("it's signature's grade is too low")
+
 class Bureaucrat;
 
 class AForm {
@@ -43,51 +48,57 @@ public:
 
 	AForm & operator= ( const AForm & src );
 
+	void				beSigned ( Bureaucrat slave );
 	const std::string	getName ( void ) const;
 	int					getSignGrade ( void ) const;
 	int					getExecGrade ( void ) const;
-	void				beSigned ( Bureaucrat slave );
 	bool				checkRequierements ( Bureaucrat const & executor ) const;
 	virtual void		execute ( Bureaucrat const & executor ) const = 0;
 
-	class gradeTooHighException : std::exception {
-		
+	/* Exceptions classes */
+
+	class signGradeTooHighException : public std::exception {
 		public:
-			virtual const char *	what() const throw() {
-				return "the form's grade is not valid";
-			}
+			virtual const char *	what() const throw();
 	};
 
-	class signGradeTooLowException : std::exception {
-		
+	class execGradeTooHighException : public std::exception {
 		public:
-			virtual const char *	what() const throw() {
-				return "his grade is too low to sign it";
-			}
+			virtual const char *	what() const throw();
+	};
+	
+	class formAlreadySigned : public std::exception {
+		public:
+			virtual const char *	what() const throw();
 	};
 
-	class formAlreadySigned : std::exception {
-		
+	class formNotSigned : public std::exception {
 		public:
-			virtual const char *	what() const throw() {
-				return "this form is already signed";
-			}
+			virtual const char *	what() const throw();
 	};
 
-	class formNotSigned : std::exception {
+	class signGradeTooLowException : public std::exception {
 		
 		public:
-			virtual const char *	what() const throw() {
-				return "this form is not signed";
-			}
+			signGradeTooLowException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~signGradeTooLowException() throw() ;
+
+		private:
+			signGradeTooLowException();
+			const std::string _msg;
 	};
 
-	class execGradeTooLowSigned : std::exception {
+	class execGradeTooLowException : public std::exception {
 		
 		public:
-			virtual const char *	what() const throw() {
-				return "his Grade is too low to execute it";
-			}
+			execGradeTooLowException(std::string const msg);
+			const char *	what() const throw();
+			virtual ~execGradeTooLowException() throw();
+
+		private:
+			execGradeTooLowException();
+			const std::string _msg;
 	};
 
 private:

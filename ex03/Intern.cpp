@@ -32,6 +32,7 @@
 Intern::Intern ( void ) {}
 Intern::Intern ( Intern const & src ) {(void)src;}
 Intern::~Intern ( void ) {}
+
 Intern &	Intern::operator= ( Intern const & src ) {(void)src; return (*this);}
 
 

@@ -1,5 +1,5 @@
 /* *************************************************************************************************************** */
-/*   AForm.cpp                                                                                                      */
+/*   Form.cpp                                                                                                      */
 /*   By: lvan-bre                                                                   .,                             */
 /*                                                                                 okxl                            */
 /*                                                                                xkddo                            */
@@ -27,6 +27,21 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
+AForm::signGradeTooLowException::signGradeTooLowException(std::string const msg) : _msg(msg) {}
+AForm::signGradeTooLowException::~signGradeTooLowException() throw() {}
+const char *	AForm::signGradeTooLowException::what() const throw()
+{return (_msg.c_str());}
+
+AForm::execGradeTooLowException::execGradeTooLowException(std::string const msg) : _msg(msg) {}
+AForm::execGradeTooLowException::~execGradeTooLowException() throw() {}
+const char *	AForm::execGradeTooLowException::what() const throw()
+{return (_msg.c_str());}
+
+const char *	AForm::signGradeTooHighException::what() const throw() {return "the form's signature's grade is not valid (too high)";}
+const char *	AForm::execGradeTooHighException::what() const throw() {return "the form's execution's grade is not valid (too high)";}
+const char *	AForm::formAlreadySigned::what() const throw() {return "this form is already signed";}
+const char *	AForm::formNotSigned::what() const throw() {return "this form is not signed";}
+
 AForm::AForm ( void ) : 
 	_name("a random paperWork"),
 	_signed(false),
@@ -37,7 +52,17 @@ AForm::AForm ( const std::string name, const int signGrade, const int execGrade 
 	_name(name),
 	_signed(false),
 	_signGrade(signGrade),
-	_execGrade(execGrade) {}
+	_execGrade(execGrade)
+{
+	if (signGrade > 150)
+		throw signGradeTooLowException(ERROR + _name + SIGN_FORM_TOO_LOW);
+	else if (signGrade < 1 )
+		throw signGradeTooHighException();
+	if (execGrade > 150)
+		throw execGradeTooLowException(ERROR + _name + EXEC_FORM_TOO_LOW);
+	else if (execGrade < 1)
+		throw execGradeTooHighException();
+}
 
 AForm::AForm ( const AForm & src ) :
 	_name(src._name),
@@ -59,34 +84,19 @@ AForm & AForm::operator= ( const AForm & src)
 
 std::ostream &	operator<< ( std::ostream & out, AForm & src )
 {
-	out << src.getName() << ", bureaucrat grade " << src.getSignGrade();
+	out << src.getName() << ", signature grade is " << src.getSignGrade() << ", and execution grade is " << src.getExecGrade();
 	return (out);
 }
 
 void	AForm::beSigned ( Bureaucrat slave )
 {
 	if (_signed) {
-		throw AForm::formAlreadySigned();
-		return ;
-	}
-
-	if (slave.getGrade() < 1) {
-		throw Bureaucrat::gradeTooHighException();
-		return ;
-	}
-
-	if (slave.getGrade() > 150) {
-		throw Bureaucrat::gradeTooLowException();
-		return ;
-	}
-	
-	if (_signGrade < 1 || _execGrade < 1) {
-		throw AForm::gradeTooHighException();
+		throw formAlreadySigned();
 		return ;
 	}
 
 	if (slave.getGrade() > _signGrade ) {
-		throw AForm::signGradeTooLowException();
+		throw signGradeTooLowException(SIGN_FORM_TOO_LOW1);
 		return ;
 	}
 
@@ -95,19 +105,13 @@ void	AForm::beSigned ( Bureaucrat slave )
 }
 
 int	AForm::getSignGrade ( void ) const
-{
-	return (_signGrade);
-}
+{return (_signGrade);}
 
 int	AForm::getExecGrade ( void ) const
-{
-	return (_execGrade);
-}
+{return (_execGrade);}
 
 const std::string AForm::getName ( void ) const
-{
-	return (_name);
-}
+{return (_name);}
 
 bool	AForm::checkRequierements ( Bureaucrat const & executor ) const
 {
@@ -116,8 +120,9 @@ bool	AForm::checkRequierements ( Bureaucrat const & executor ) const
 		return (false);
 	}
 	if (executor.getGrade() > _execGrade) {
-		throw execGradeTooLowSigned();
+		throw execGradeTooLowException(EXEC_FORM_TOO_LOW1);
 		return (false);
 	}
 	return (true);
 }
+

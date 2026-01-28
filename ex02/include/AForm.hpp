@@ -44,7 +44,7 @@ public:
 	AForm ( const std::string name, const int signGrade, const int execGrade );
 	AForm ( const AForm & src );
 
-	~AForm ( void );
+	virtual ~AForm ( void );
 
 	AForm & operator= ( const AForm & src );
 
@@ -55,7 +55,9 @@ public:
 	bool				checkRequierements ( Bureaucrat const & executor ) const;
 	virtual void		execute ( Bureaucrat const & executor ) const = 0;
 
+	/* ****************** */
 	/* Exceptions classes */
+	/* ****************** */
 
 	class signGradeTooHighException : public std::exception {
 		public:

@@ -24,19 +24,47 @@
 /*                                                                                                                 */
 /* *************************************************************************************************************** */
 
-#include "Bureaucrat.hpp"
+#include "Bureaucrat.hpp" 
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
 
-Bureaucrat::Bureaucrat ( void ) : _name("John"), _grade(150) {}
+/* Exceptions implementations */
 
-Bureaucrat::Bureaucrat ( const std::string name , int grade) : _name(name), _grade(grade) {}
+Bureaucrat::gradeTooHighException::gradeTooHighException(std::string const msg) : _msg(msg) {}
+Bureaucrat::gradeTooHighException::~gradeTooHighException() throw() {}
+
+const char *	Bureaucrat::gradeTooHighException::what() const throw()
+{return (_msg.c_str());}
+
+Bureaucrat::gradeTooLowException::gradeTooLowException(std::string const msg) : _msg(msg) {}
+Bureaucrat::gradeTooLowException::~gradeTooLowException() throw() {}
+
+const char *	Bureaucrat::gradeTooLowException::what() const throw()
+{return (_msg.c_str());}
+
+/* Bureaucrat implementations */
+
+Bureaucrat::Bureaucrat ( void ) : _name("default"), _grade(150) {}
+
+Bureaucrat::Bureaucrat ( std::string const name, int const grade ) : _name(name), _grade(grade)
+{
+	if (grade > 150)
+	{
+		throw gradeTooLowException(_name + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
+
+	if (grade < 1) {
+		throw gradeTooHighException(_name + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
+}
 
 Bureaucrat::Bureaucrat ( const Bureaucrat & src ) : _name(src._name), _grade(src._grade) {}
 
 Bureaucrat::~Bureaucrat ( void ) {}
 
-Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src ) 
+Bureaucrat & Bureaucrat::operator= ( const Bureaucrat & src )
 {
 	if ( this != &src ) {
 		_grade = src._grade;
@@ -52,27 +80,39 @@ std::ostream &	operator<< ( std::ostream & out, Bureaucrat & src )
 
 
 const std::string Bureaucrat::getName ( void ) const
-{
-	return (_name);
-}
+{return (_name);}
 
 int	Bureaucrat::getGrade ( void ) const
-{
-	return (_grade);
-}
+{return (_grade);}
 
 void	Bureaucrat::promotion ( void )
 {
+	if (_grade - 1 < 1) {
+		throw gradeTooHighException(ERROR + PROMOTION_FAIL + _name + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
 	_grade--;
 }
 
 void	Bureaucrat::demotion ( void )
 {
+	if (_grade + 1 > 150) {
+		throw gradeTooLowException(ERROR + DEMOTE_FAIL + _name + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
 	_grade++;
 }
 
-void	Bureaucrat::put_grade ( int newGrade )
+void	Bureaucrat::put_grade ( int newGrade ) 
 {
+	if (newGrade < 1) {
+		throw gradeTooHighException(ERROR + CHANGE_GRADE_FAIL + BUREAUCRAT_TOO_HIGH);
+		return ;
+	}
+	if (newGrade > 150) {
+		throw gradeTooLowException(ERROR + CHANGE_GRADE_FAIL + BUREAUCRAT_TOO_LOW);
+		return ;
+	}
 	_grade = newGrade;
 }
 
@@ -81,42 +121,23 @@ void	Bureaucrat::signForm ( AForm & form )
 	try {
 		form.beSigned( *this );
 	}
-	catch (Bureaucrat::gradeTooHighException& e) {
-		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
-	}
-	catch (Bureaucrat::gradeTooLowException& e) {
-		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
-	}
-	catch (AForm::gradeTooHighException& e) {
-		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
-	}
-	catch (AForm::signGradeTooLowException& e) {
-		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
-	}
-	catch (AForm::formAlreadySigned& e) {
-		std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+	catch (std::exception& e) {
+		std::cout << _name << " couldn't sign " << form.getName() << " because" << e.what() << std::endl;
 	}
 }
+
 
 void	Bureaucrat::executeForm ( AForm const & form )
 {
 	try {
 		form.execute(*this);
 	}
-
-	catch (AForm::formNotSigned& e) {
-		std::cout << getName() << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;;
-		return ;
-	}
-
-	catch (AForm::execGradeTooLowSigned& e) {
-		std::cout << getName() << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;;
-		return ;
-	}
-
 	catch (ShrubberyCreationForm::failedToOpenFileException& e) {
 		std::cout << e.what() << std::endl;
 	}
-
+	catch (std::exception& e) {
+		std::cout << getName() << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;;
+		return ;
+	}
 	std::cout << getName() << " executed " << form.getName() << std::endl;
 }

@@ -27,8 +27,8 @@
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
-#include "Intern.hpp"
 #include "Bureaucrat.hpp"
+#include "Intern.hpp"
 
 int	main ( void )
 {
@@ -42,6 +42,8 @@ int	main ( void )
 		Pdg.executeForm(*newForm);
 	}
 	
+	std::cout << "\n";
+
 	delete newForm;
 
 	newForm = Random.makeForm("robotomy request", "bip boop");
@@ -50,6 +52,8 @@ int	main ( void )
 		Pdg.executeForm(*newForm);
 	}
 
+	std::cout << "\n";
+
 	delete newForm;
 
 	newForm = Random.makeForm("presidential pardon", "Steve the fish");
@@ -57,6 +61,8 @@ int	main ( void )
 		Pdg.signForm(*newForm);
 		Pdg.executeForm(*newForm);
 	}
+
+	std::cout << "\n";
 
 	delete newForm;
 
